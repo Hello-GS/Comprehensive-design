@@ -1,8 +1,10 @@
 import os
 import cv2
 import matplotlib.pyplot as plt
+
+
 def read_file(filename):
-    q =0 
+    q = 0
     count0 = {}
     count1 = {}
     dir0 = {}
@@ -10,8 +12,8 @@ def read_file(filename):
     dir0_event = {}
     dir1_event = {}
 
-    with open(filename) as txtdata:
-        lines = txtdata.readlines()
+    with open(filename) as txtData:
+        lines = txtData.readlines()
         for line in lines:
 
             str_lable = line.strip().split('  ')
@@ -19,7 +21,7 @@ def read_file(filename):
             test = open(txt, 'a')
 
             if str_lable[1] == '0':
-                q+=1
+                q += 1
                 str_list = str_lable[0].split('.')
                 event = str_list[2]
                 year = str_list[3][0:4]
@@ -28,7 +30,7 @@ def read_file(filename):
                 else:
                     count0[year] = 1
                 if event in dir0_event.keys():
-                    dir0_event[event]+=1
+                    dir0_event[event] += 1
                 else:
                     dir0_event[event] = 1
                 if year in dir0.keys():
@@ -37,11 +39,10 @@ def read_file(filename):
                     else:
                         continue
                 else:
-                    list = []
-                    list.append(event)
-                    dir0[year]=list
+                    list = [event]
+                    dir0[year] = list
             else:
-                
+
                 str_list = str_lable[0].split('.')
                 event = str_list[2]
                 year = str_list[3][0:4]
@@ -50,7 +51,7 @@ def read_file(filename):
                 else:
                     count1[year] = 1
                 if event in dir1_event.keys():
-                    dir1_event[event]+=1
+                    dir1_event[event] += 1
                 else:
                     dir1_event[event] = 1
                 if year in dir1.keys():
@@ -87,8 +88,6 @@ def read_file(filename):
         year_label1 = []
         label1_count = []
 
-        
-
         for i in dir0.keys():
             list0_year.append(int(i))
             list0_year_count.append(len(dir0[i]))
@@ -109,65 +108,51 @@ def read_file(filename):
             year_label1.append(int(i))
             label1_count.append(count1[i])
 
-
-        
-        
         Interval0 = []
-        num0=[]
-        Interval0_count = {'0-20': 0, '20-40':0, '40-60':0, '60-80':0, '80-100':0, '>100':0}
-        Interval1 =[]
-        num1=[]
-        Interval1_count = {'0-20': 0, '20-40':0, '40-60':0, '60-80':0, '80-100':0, '>100':0}
+        num0 = []
+        Interval0_count = {'0-20': 0, '20-40': 0, '40-60': 0, '60-80': 0, '80-100': 0, '>100': 0}
+        Interval1 = []
+        num1 = []
+        Interval1_count = {'0-20': 0, '20-40': 0, '40-60': 0, '60-80': 0, '80-100': 0, '>100': 0}
         for i in list0_event_count:
-            if i>=0 and i<20:
-                Interval0_count['0-20']+=1
-            elif i>=20 and i<40:
-                Interval0_count['20-40']+=1
-            elif i>=40 and i<60:
-                Interval0_count['40-60']+=1
-            elif i>=60 and i<80:
-                Interval0_count['60-80']+=1
-            elif i>=80 and i<100:
-                Interval0_count['80-100']+=1
+            if 0 <= i < 20:
+                Interval0_count['0-20'] += 1
+            elif 20 <= i < 40:
+                Interval0_count['20-40'] += 1
+            elif 40 <= i < 60:
+                Interval0_count['40-60'] += 1
+            elif 60 <= i < 80:
+                Interval0_count['60-80'] += 1
+            elif 80 <= i < 100:
+                Interval0_count['80-100'] += 1
             else:
-                Interval0_count['>100']+=1
+                Interval0_count['>100'] += 1
 
-        
         for i in list1_event_count:
-            if i>=0 and i<20:
-                Interval1_count['0-20']+=1
-            elif i>=20 and i<40:
-                Interval1_count['20-40']+=1
-            elif i>=40 and i<60:
-                Interval1_count['40-60']+=1
-            elif i>=60 and i<80:
-                Interval1_count['60-80']+=1
-            elif i>=80 and i<100:
-                Interval1_count['80-100']+=1
+            if 0 <= i < 20:
+                Interval1_count['0-20'] += 1
+            elif 20 <= i < 40:
+                Interval1_count['20-40'] += 1
+            elif 40 <= i < 60:
+                Interval1_count['40-60'] += 1
+            elif 60 <= i < 80:
+                Interval1_count['60-80'] += 1
+            elif 80 <= i < 100:
+                Interval1_count['80-100'] += 1
             else:
-                Interval1_count['>100']+=1
-        
+                Interval1_count['>100'] += 1
 
-        s=0
+        s = 0
         for i in list0_event_count:
-            s+=i
-        print(s,q)
+            s += i
+        print(s, q)
         for i in Interval0_count.keys():
             Interval0.append(i)
             num0.append(Interval0_count[i])
 
-        
         for i in Interval1_count.keys():
             Interval1.append(i)
             num1.append(Interval1_count[i])
-            
-
-        
-
-        
-
-
-
 
         # plt.bar(list0_year ,list0_year_count, label='label0')
         # plt.bar(list1_year, list1_year_count, label='label1')
@@ -181,15 +166,12 @@ def read_file(filename):
         # plt.ylabel('photo_count')
         # plt.legend()
 
+        plt.bar(list0_event, list0_event_count, width=15, label='label0')
+        plt.bar(list1_event, list1_event_count, width=15, label='label1')
 
-        plt.bar(list0_event, list0_event_count, width = 15,label='label0')
-        plt.bar(list1_event, list1_event_count, width = 15, label='label1')
-        
         plt.xlabel('event')
         plt.ylabel('photo_count')
         plt.legend()
-
-
 
         # plt.bar(Interval0, num0, label='label0')
         # plt.bar(Interval1, num1, label='label1')
@@ -197,19 +179,13 @@ def read_file(filename):
         # plt.ylabel('event_count')
         # plt.legend()
 
-        
-
-        #ax2.bar(list0_event, list0_event_count, label='label0')
-        #ax2.hist(list0_event, list0_event_count, histtype='bar', rwidth=0.8)
+        # ax2.bar(list0_event, list0_event_count, label='label0')
+        # ax2.hist(list0_event, list0_event_count, histtype='bar', rwidth=0.8)
         # ax2.hist(list1_event, list1_event_count, histtype='bar', rwidth=0.8)
-        #ax2.bar(list1_event, list1_event_count, label='label1')
-        #ax2.legend()
-        #plt.hist(salary, group, histtype='bar', rwidth=0.8)
+        # ax2.bar(list1_event, list1_event_count, label='label1')
+        # ax2.legend()
+        # plt.hist(salary, group, histtype='bar', rwidth=0.8)
         plt.show()
-
-
-
-
 
 
 read_file('/Users/gaoshang/PycharmProjects/LAB/alldata_output.txt')
