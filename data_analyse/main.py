@@ -4,6 +4,10 @@ import os
 path = ''
 year_map_0 = {}
 year_map_1 = {}
+year_event_0 = {}
+year_event_1 = {}
+event_graph_0 = {}
+event_graph_1 = {}
 
 
 def read_config():
@@ -33,21 +37,40 @@ if __name__ == '__main__':
             continue
         incident_number = len(os.listdir(path + '0/' + file))
         year = int(get_year(file))
+        event_graph_0[file]=incident_number
+        if year in year_event_0:
+            year_event_0[year] += 1
+        else:
+            year_event_0[year] = 1
         if year in year_map_0:
             year_map_0[year] = year_map_0[year] + incident_number
         else:
             year_map_0[year] = incident_number
-    output.write('年份：图片数 类型0:\n')
-    output.write(write_map(year_map_0))
+
     flies = os.listdir(path + '1/')
     for file in flies:
         if file == '.DS_Store':
             continue
         incident_number = len(os.listdir(path + '1/' + file))
         year = int(get_year(file))
+        event_graph_1[file]=incident_number
+        if year in year_event_1:
+            year_event_1[year] += 1
+        else:
+            year_event_1[year] = 1
         if year in year_map_1:
             year_map_1[year] = year_map_1[year] + incident_number
         else:
             year_map_1[year] = incident_number
-    output.write('年份：图片数 类型 1:\n')
+    output.write('年份：图片数 类型0:\n')
+    output.write(write_map(year_map_0))
+    output.write('年份：图片数 类型1:\n')
     output.write(write_map(year_map_1))
+    output.write('年份：事件数 类型0：\n')
+    output.write(write_map(year_event_0))
+    output.write('年份：事件数 类型1：\n')
+    output.write(write_map(year_event_1))
+    output.write('事件：图片数 类型0：\n')
+    output.write(write_map(event_graph_0))
+    output.write('事件：图片数 类型1：\n')
+    output.write(write_map(event_graph_1))
