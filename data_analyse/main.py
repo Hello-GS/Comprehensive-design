@@ -1,7 +1,8 @@
 import configparser
 import os
 
-path = ''
+input_path = ''
+output_path = ''
 year_map_0 = {}
 year_map_1 = {}
 year_event_0 = {}
@@ -13,8 +14,10 @@ event_graph_1 = {}
 def read_config():
     config = configparser.ConfigParser()
     config.read('./config.ini')
-    global path
-    path = config.get('data', 'data_path')
+    global input_path
+    input_path = config.get('data', 'data_path')
+    global output_path
+    output_path = config.get('data', 'output_path')
 
 
 def get_year(file_name):
@@ -30,14 +33,14 @@ def write_map(map_to_write):
 
 if __name__ == '__main__':
     read_config()
-    output = open('./output.txt', 'r+')
-    flies = os.listdir(path + '0/')
+    output = open(output_path, 'r+')
+    flies = os.listdir(input_path + '0/')
     for file in flies:
         if file == '.DS_Store':
             continue
-        incident_number = len(os.listdir(path + '0/' + file))
+        incident_number = len(os.listdir(input_path + '0/' + file))
         year = int(get_year(file))
-        event_graph_0[file]=incident_number
+        event_graph_0[file] = incident_number
         if year in year_event_0:
             year_event_0[year] += 1
         else:
@@ -47,13 +50,13 @@ if __name__ == '__main__':
         else:
             year_map_0[year] = incident_number
 
-    flies = os.listdir(path + '1/')
+    flies = os.listdir(input_path + '1/')
     for file in flies:
         if file == '.DS_Store':
             continue
-        incident_number = len(os.listdir(path + '1/' + file))
+        incident_number = len(os.listdir(input_path + '1/' + file))
         year = int(get_year(file))
-        event_graph_1[file]=incident_number
+        event_graph_1[file] = incident_number
         if year in year_event_1:
             year_event_1[year] += 1
         else:
