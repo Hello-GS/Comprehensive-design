@@ -1,8 +1,10 @@
 import configparser
 import os
+import yagmail
 
 input_path = ''
 output_path = ''
+user, password, receiver, host = '', '', [], ''
 year_map_0 = {}
 year_map_1 = {}
 year_event_0 = {}
@@ -14,10 +16,13 @@ event_graph_1 = {}
 def read_config():
     config = configparser.ConfigParser()
     config.read('./config.ini')
-    global input_path
+    global user, password, receiver, input_path, output_path, host
     input_path = config.get('data', 'data_path')
-    global output_path
     output_path = config.get('data', 'output_path')
+    user = config.get('email', 'user')
+    password = config.get('email', 'password')
+    receiver = config.get('email', 'receiver').split(',')
+    host = config.get('email', 'host')
 
 
 def get_year(file_name):
@@ -29,6 +34,10 @@ def write_map(map_to_write):
     for key in sorted(map_to_write.keys()):
         out += str(key) + ':' + str(map_to_write[key]) + '\n'
     return out
+
+
+def send_email(title, content):
+    yagmail.SMTP(user=user, password=password, host=host).send(receiver, title, content)
 
 
 if __name__ == '__main__':
@@ -46,7 +55,7 @@ if __name__ == '__main__':
         else:
             year_event_0[year] = 1
         if year in year_map_0:
-            year_map_0[year] = year_map_0[year] + incident_number
+            year_map_0[year] += incident_number
         else:
             year_map_0[year] = incident_number
 
@@ -62,7 +71,7 @@ if __name__ == '__main__':
         else:
             year_event_1[year] = 1
         if year in year_map_1:
-            year_map_1[year] = year_map_1[year] + incident_number
+            year_map_1[year] += incident_number
         else:
             year_map_1[year] = incident_number
     output.write('年份：图片数 类型0:\n')
@@ -77,3 +86,4 @@ if __name__ == '__main__':
     output.write(write_map(event_graph_0))
     output.write('事件：图片数 类型1：\n')
     output.write(write_map(event_graph_1))
+    send_email('分析结果', output_path)
